@@ -59,7 +59,7 @@ func TestLockBasedReqResp_WaitComplete_90pass(t *testing.T) {
 	wg.Wait()
 }
 
-func implBenchmarkTemplateParallelLockBasedReqResp_WaitComplete(b *testing.B, workerCount int, workBufferSize int) {
+func implBenchmarkParallelLockBasedReqResp_WaitComplete(b *testing.B, workerCount int, workBufferSize int) {
 	wg := sync.WaitGroup{}
 	ch := make(chan *reqresp.LockBasedReqResp, workBufferSize)
 	for workerIdx := 0; workerIdx < workerCount; workerIdx++ {
@@ -74,30 +74,31 @@ func implBenchmarkTemplateParallelLockBasedReqResp_WaitComplete(b *testing.B, wo
 			target.Req = reqVal
 			target.Resp = 0
 			target.Wait(ch)
+			_ = target.Resp
 			reqVal++
 		}
 	})
-	// b.StopTimer()
+	b.StopTimer()
 	close(ch)
 	wg.Wait()
 }
 
-func BenchmarkTemplateParallelLockBasedReqResp_WaitComplete_1_1(b *testing.B) {
-	implBenchmarkTemplateParallelLockBasedReqResp_WaitComplete(b, 1, 1)
+func BenchmarkParallelLockBasedReqResp_WaitComplete_1_1(b *testing.B) {
+	implBenchmarkParallelLockBasedReqResp_WaitComplete(b, 1, 1)
 }
 
-func BenchmarkTemplateParallelLockBasedReqResp_WaitComplete_2_1(b *testing.B) {
-	implBenchmarkTemplateParallelLockBasedReqResp_WaitComplete(b, 2, 1)
+func BenchmarkParallelLockBasedReqResp_WaitComplete_2_1(b *testing.B) {
+	implBenchmarkParallelLockBasedReqResp_WaitComplete(b, 2, 1)
 }
 
-func BenchmarkTemplateParallelLockBasedReqResp_WaitComplete_2_2(b *testing.B) {
-	implBenchmarkTemplateParallelLockBasedReqResp_WaitComplete(b, 2, 2)
+func BenchmarkParallelLockBasedReqResp_WaitComplete_2_2(b *testing.B) {
+	implBenchmarkParallelLockBasedReqResp_WaitComplete(b, 2, 2)
 }
 
-func BenchmarkTemplateParallelLockBasedReqResp_WaitComplete_2_4(b *testing.B) {
-	implBenchmarkTemplateParallelLockBasedReqResp_WaitComplete(b, 2, 4)
+func BenchmarkParallelLockBasedReqResp_WaitComplete_2_4(b *testing.B) {
+	implBenchmarkParallelLockBasedReqResp_WaitComplete(b, 2, 4)
 }
 
-func BenchmarkTemplateParallelLockBasedReqResp_WaitComplete_4_2(b *testing.B) {
-	implBenchmarkTemplateParallelLockBasedReqResp_WaitComplete(b, 4, 2)
+func BenchmarkParallelLockBasedReqResp_WaitComplete_4_2(b *testing.B) {
+	implBenchmarkParallelLockBasedReqResp_WaitComplete(b, 4, 2)
 }
