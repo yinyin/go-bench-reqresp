@@ -20,3 +20,7 @@ func (r *ChannelBasedReqResp) Wait(ch chan *ChannelBasedReqResp) {
 func (r *ChannelBasedReqResp) Complete(resp int32) {
 	r.RespCh <- resp
 }
+
+func (r *ChannelBasedReqResp) Release() {
+	close(r.RespCh)
+}
